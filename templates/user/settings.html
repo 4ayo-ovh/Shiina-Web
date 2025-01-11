@@ -1,0 +1,95 @@
+<#include "/assets/base.html">
+<div class="container">
+    <div class="card w-100">
+        <div class="bg-secondary border-0 card-header text-body d-flex justify-content-between align-items-center py-4">
+            <span class="h1 fw-bold mb-0">User Settings</span>
+        </div>
+
+        <div class="card-body  bg-body px-4">
+            <#if error??>
+            <div class="alert alert-danger" role="alert">
+                ${error}
+            </div>
+            </#if>
+            <#if info??>
+                <div class="alert alert-primary" role="alert">
+                    ${info}
+                </div>
+            </#if>
+
+            <div class="shiina-pill mb-2 px-2 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>Profile Picture</span>
+            </div>
+            <div class="row px-2 pb-2">
+                <div class="col col-2 col-sm-1">
+                    <img src="${avatarServer}/${user.id?c}" class="w-100" alt="Avatar">
+                </div>
+                <div class="col col-auto">
+                    <form id="avatar-upload-form" action="/settings/avatar" method="post" enctype="multipart/form-data" class="w-100" onsubmit="return handleAvatarUpload(event)">
+                        <div class="form-group">
+                            <input type="file" name="avatar" id="avatar" accept=".png" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Upload</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="shiina-pill px-2 mt-2 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>Userpage</span>
+            </div>
+            <div class="m-2 pb-2">
+                <form action="/settings/userpage" method="post">
+                    <textarea name="userpage" style="height: 250px; color:black;" id="editor"><#if curUserpage??>${curUserpage}</#if></textarea>
+                    <button type="submit" class="btn btn-primary mt-2">Change Userpage</button>
+                </form>
+
+           
+            </div>
+
+           
+            <div class="row position-relative p-2 mt-2">
+                
+ <!--           <#if !userPriv?seq_contains("SUPPORTER")>
+                <div class="nosupporter col col-12 position-absolute">
+                    <h1>You will need <span class="supporter">Supporter</span> for name and flag change</h1>
+                </div>
+                </#if> -->
+                <div class="shiina-pill m-0 mb-2 d-flex align-items-center">
+                    <div class="shiina-pill-icon"></div>
+                    <span>Identity Change</span>
+                </div>
+
+       
+                    <form id="countryForm" action="/settings/country" method="post" class="w-100 pb-2">
+                            <select name="newCountry" id="country-selector" class="form-select-sm bg-dark" style="width: 100%;">
+                                <#list countries as country>
+                                    <option <#if country?contains(curCountry?upper_case)>selected</#if> value="${country.code}" data-flag="/img/flags/${country.code?lower_case}.svg">
+                                        ${country.name}
+                                    </option>
+                                </#list>
+                            </select>
+                        <button type="submit" class="btn btn-primary mt-2">Change Flag</button>
+                    </form>
+                    <form id="nameForm" action="/settings/name" method="post" class="w-100">
+                       
+                            <input
+                                type="text"
+                                class="form-control mt-2"
+                                name="newname"
+                                placeholder="New name"
+                            />
+                       
+                        
+                    <button type="submit" class="btn btn-primary mt-2">Change Name</button>
+                       
+                </form>
+  
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<#include "/assets/footer.html">

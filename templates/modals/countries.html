@@ -1,0 +1,19 @@
+<div class="modal fade" id="country-modal" tabindex="-1" aria-labelledby="modal-title-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row d-flex justify-content-center align-items-center">
+                    <#list countries as flag>
+                        <#if (flag_index> 10)>
+                            <span onclick="selectParam('country', '${flag}')"
+                                class="col-auto country-selector <#if country??><#if flag == country>active</#if></#if>"><img
+                                    class="flag"
+                                    src="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${flag}.svg"
+                                    alt=""></span>
+                        </#if>
+                    </#list>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

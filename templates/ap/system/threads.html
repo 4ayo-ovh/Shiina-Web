@@ -1,0 +1,36 @@
+<#include "/ap/assets/base.html">
+
+<div class="container-fluid my-3">
+    <#list threads as thread>
+        <div class="card mb-3 shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                <h2 class="mb-0">${thread.name}</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>ID:</strong> ${thread.id}</p>
+                        <p><strong>State:</strong> ${thread.state}</p>
+                        <p><strong>CPU Time:</strong> ${thread.cpuTime} ms</p>
+                        <p><strong>User Time:</strong> ${thread.userTime} ms</p>
+                        <p><strong>Blocked Count:</strong> ${thread.blockedCount}</p>
+                        <p><strong>Blocked Time:</strong> ${thread.blockedTime} ms</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Waited Count:</strong> ${thread.waitedCount}</p>
+                        <p><strong>Waited Time:</strong> ${thread.waitedTime} ms</p>
+                        <p><strong>Lock Owner ID:</strong> ${thread.lockOwnerId}</p>
+                        <p><strong>In Native:</strong> ${thread.inNative?string('Yes', 'No')}</p>
+                        <p><strong>Suspended:</strong> ${thread.suspended?string('Yes', 'No')}</p>
+                        <p><strong>Daemon:</strong> ${thread.daemon?string('Yes', 'No')}</p>
+                        <p><strong>Interrupted:</strong> ${thread.interrupted?string('Yes', 'No')}</p>
+                        <p><strong>Stack Trace Hash:</strong> ${thread.stackTraceHash}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </#list>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,151 @@
+<#include "assets/base.html">
+    <div class="container">
+        <div class="card">
+            <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
+                <#include "/freemarker/selector.ftl">
+                <div class="my-2 col-12 col-md-auto my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
+                    <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
+                        <button type="button" onclick="selectParam('sort', 'pp')"
+                            class="btn btn-<#if sort == 'pp'>primary<#else>secondary</#if>">PP</button>
+                        <button type="button" onclick="selectParam('sort', 'tscore')"
+                            class="btn btn-<#if sort == 'tscore'>primary<#else>secondary</#if>">Total Score</button>
+                        <button type="button" onclick="selectParam('sort', 'rscore')"
+                            class="btn btn-<#if sort == 'rscore'>primary<#else>secondary</#if>">Ranked Score</button>
+                        <button type="button" onclick="selectParam('sort', 'acc')"
+                            class="btn btn-<#if sort == 'acc'>primary<#else>secondary</#if>">Accuracy</button>
+                        <button type="button" onclick="selectParam('sort', 'playtime')"
+                            class="btn btn-<#if sort == 'playtime'>primary<#else>secondary</#if>">Playtime</button>
+
+                    </div>
+
+                </div>
+                <div class="my-2 col col-auto d-flex align-items-center justify-content-center ">
+                    <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
+                        <button type="button" onclick="selectParam('mode', '<#if (mode == 0 || mode == 1 || mode == 2 || mode == 8)>${convertModeToRelax(mode)}</#if>')"
+                            class="btn btn-<#if (mode == 4 || mode == 5 || mode == 6)>primary<#else>secondary</#if>" <#if (mode == 3)>disabled</#if>>Relax</button>
+                        <button type="button" onclick="selectParam('mode', '8')"
+                            class="btn btn-<#if mode == 8>primary<#else>secondary</#if>" <#if (mode != 0 && mode != 4  && mode != 8)>disabled</#if>>AutoPilot</button>
+                        
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="card mt-4 d-flex justify-content-center align-items-center">
+            <div class="px-auto row d-flex justify-content-center align-items-center w-100">
+                <button onclick="removeParam('country')"
+                    class="col-auto country-selector pt-1 btn <#if !country??> btn-primary active <#else>btn-secondary</#if>">No Country</button>
+                <#list countries as flag>
+                    <#if flag_index==10>
+                        <span data-bs-toggle="modal" data-bs-target="#country-modal" style="user-select: none;"
+                            class="col-auto country-selector pt-1">...</span>
+                        <#break>
+                    </#if>
+                    <span onclick="selectParam('country', '${flag}')"
+                        class="col-auto country-selector <#if country??><#if flag == country>active</#if></#if>"><img
+                            class="flag"
+                            src="/img/flags/${flag}.svg"
+                            alt=""></span>
+                </#list>
+            </div>
+        </div>
+    </div>
+
+    <#include "modals/countries.html">
+
+        <div class="container">
+            <div class="card leaderboard mt-4 mb-4">
+                <div class="row">
+                    <div class="col col-12">
+                        <div class="row">
+                            <div class="col col-auto">
+                                <button onclick="selectParam('page', '${page - 1}')"
+                                    class="pagination-button bg-secondary m-2 <#if page ==1>disabled</#if>" <#if
+                                    page==1>disabled</#if>><i
+                                        class="fa-solid fa-arrow-left pagination-icon"></i></button>
+                            </div>
+                            <div class="col ms-auto col-auto">
+                                <button onclick="selectParam('page', '${page + 1}')"
+                                    class="pagination-button bg-secondary m-2 <#if pageSize != 50>disabled</#if>" <#if
+                                    pageSize !=50>disabled</#if>><i
+                                        class="fa-solid fa-arrow-right pagination-icon"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col col-12">
+                        <ul class="leaderboard-list">
+                            <#assign leaderboardC=0>
+                                <#list leaderboard as player>
+
+                                    <li style="list-style: none;">
+                                        <a href="/u/${player.playerId?c}?mode=${mode}" class="bg-secondary m-2 p-3 row leaderboard-panel style="border-radius: 5px;">
+                                            <span class="col-auto d-flex align-items-center"><img class="flag"
+                                                src="${avatarServer}/${player.playerId?c}"
+                                                alt=""></span>
+                                            <span class="col-auto d-flex align-items-center"><img class="flag"
+                                                    src="/img/flags/${player.country}.svg"
+                                                    alt=""></span>
+                                            <span class="col-auto"
+                                                style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);">#${offset
+                                                + leaderboardC}</span>
+                                            <span class="col-auto d-flex align-items-center">
+                                                <#if player.clanTag?? && player.clanId??>
+                                                    <button class="clan-badge btn btn-primary" >[${player.clanTag}]</button>
+                                                </#if>
+                                                <span class="mx-2">${player.name}</span>  <#if player.groups??> <#list player.groups as group><span class="groupDiv">${group.emoji} ${group.name}</span></#list></#if>
+                                            </span>
+
+                                            <div class="col-auto ms-auto d-flex align-items-center">
+
+                                                <#switch sort>
+                                                    <#case "pp">${player.pp}pp<#break>
+                                                    <#case "tscore">${player.totalScore} Score<#break>
+                                                    <#case "rscore">${player.rankedScore} Score<#break>
+                                                    <#case "acc">${player.accuracy}%<#break>
+                                                    <#case "playtime">
+                                                        <#list convertPlaytime(player.playtime)?keys as key>
+                                                            ${convertPlaytime(player.playtime)[key]}
+                                                            ${key}
+                                                        </#list>
+                                                        <#break>
+                                                </#switch>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <#assign leaderboardC=leaderboardC + 1>
+                                </#list>
+                        </ul>
+                    </div>
+                    <section id="bot">
+                        <div class="col col-12">
+                            <div class="row">
+                                <div class="col col-auto">
+                                    <button onclick="selectParam('page', '${page - 1}')"
+                                        class="pagination-button bg-secondary m-2 <#if page ==1>disabled</#if>" <#if
+                                        page==1>disabled</#if>><i
+                                            class="fa-solid fa-arrow-left pagination-icon"></i></button>
+                                </div>
+                                <div class="col ms-auto col-auto">
+                                    <button onclick="selectParam('page', '${page + 1}')"
+                                        class="pagination-button bg-secondary m-2 <#if pageSize != 50>disabled</#if>" <#if
+                                        pageSize !=50>disabled</#if>><i
+                                            class="fa-solid fa-arrow-right pagination-icon"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        </div>
+    <div>
+</div>
+<#include "assets/footer.html">

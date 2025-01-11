@@ -1,0 +1,148 @@
+<#include "assets/base.html">
+<script>
+    // Base price
+    const basePrice = 5.00;
+    const discountPerMonth = 0.025; // 2.5% discount per month
+
+    // Handle the display of the player name input based on donation type
+    function handleDonationTypeChange() {
+        const donationTypeSelect = document.getElementById('donation-type');
+        const playerNameContainer = document.getElementById('player-name-container');
+
+        if (donationTypeSelect.value === 'gift') {
+            playerNameContainer.style.display = 'block';
+        } else {
+            playerNameContainer.style.display = 'none';
+        }
+    }
+
+    // Handle the range slider display for duration and price calculation
+    function updatePrice() {
+        const durationSlider = document.getElementById('duration');
+        const durationDisplay = document.getElementById('duration-display');
+        const priceDisplay = document.getElementById('price');
+        const discountDisplay = document.getElementById('discount');
+
+        const months = parseInt(durationSlider.value);
+        durationDisplay.textContent = months + " " + (months === 1 ? 'Month' : 'Months');
+
+        // Calculate total price without discount
+        const totalPriceWithoutDiscount = basePrice * months;
+
+        // Calculate discount in euros
+        let discount = 0;
+        if (months > 1) {
+            discount = totalPriceWithoutDiscount - (basePrice * (1 - (discountPerMonth * (months - 1))) * months);
+        }
+        discountDisplay.textContent = discount.toFixed(2) + "€";
+
+        // Calculate price with discount
+        let totalPrice = totalPriceWithoutDiscount;
+        if (months > 1) {
+            totalPrice = basePrice * (1 - (discountPerMonth * (months - 1))) * months;
+        }
+
+        // Round the total price to the nearest 0.50€ increment
+        const roundedPrice = Math.round(totalPrice * 2) / 2;
+
+        priceDisplay.textContent = roundedPrice.toFixed(2) + "€";
+    }
+
+    // Initial price calculation
+    window.onload = function() {
+        updatePrice();
+        handleDonationTypeChange();
+    };
+</script>
+<div class="container mb-2">
+    <div class="card w-100">
+        <div class="bg-secondary border-0 card-header text-body d-flex justify-content-between align-items-center py-4">
+            <span class="h1 fw-bold mb-0">Donate</span>
+        </div>
+
+        <div class="card-body bg-body px-4">
+            <#if error??>
+                <div class="alert alert-danger" role="alert">
+                    ${error}
+                </div>
+            </#if>
+            <#if info??>
+                <div class="alert alert-primary" role="alert">
+                    ${info}
+                </div>
+            </#if>
+
+            <h3 class="fw-bold mb-3">Exclusive Donor Features</h3>
+            <ul class="list-group">
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="fas fa-user-tag fa-fw me-3 text-warning"></i>
+                    <span>Yellow Name on Profile</span>
+                </li>
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="fas fa-medal fa-fw me-3 text-warning"></i>
+                    <span>Special Donor Badge</span>
+                </li>
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="fas fa-globe fa-fw me-3 text-warning"></i>
+                    <span>Unlimited Country Changes</span>
+                </li>
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="fas fa-pen fa-fw me-3 text-warning"></i>
+                    <span>Unlimited Name Changes</span>
+                </li>
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="fas fa-user-secret fa-fw me-3 text-warning"></i>
+                    <span>Yellow Name In-Game</span>
+                </li>
+                <li class="list-group-item d-flex align-items-center">
+                    <i class="fas fa-cogs fa-fw me-3 text-warning"></i>
+                    <span>More Features Coming Soon</span>
+                </li>
+            </ul>
+
+            <small>${c.serverName} isn't cheap to run, a donation would help our services</small>
+
+            <form data-turbo="false" action="/donate" method="post" class="mt-4">
+                <!-- Donation Type Selection -->
+                <div class="mb-3">
+                    <label for="donation-type" class="form-label">Select Donation Type</label>
+                    <select id="donation-type" name="donation-type" class="form-select" required onchange="handleDonationTypeChange()">
+                        <option value="self">Donate for yourself</option>
+                        <option value="gift">Gift to a player</option>
+                    </select>
+                </div>
+
+                <!-- Player Name Input (appears if gifting) -->
+                <div id="player-name-container" class="mb-3" style="display:none;">
+                    <label for="player-name" class="form-label">Player's Name</label>
+                    <input type="text" id="player-name" name="player-name" class="form-control" placeholder="Enter the player's name" />
+                </div>
+
+                <!-- Donation Duration Slider -->
+                <div class="mb-3">
+                    <label for="duration" class="form-label">Select Duration (Months)</label>
+                    <input type="range" id="duration" name="duration" class="form-range" min="1" max="12" value="1" step="1" oninput="updatePrice()" />
+                    <div class="d-flex justify-content-between">
+                        <span>1 Month</span>
+                        <span>12 Months</span>
+                    </div>
+                    <div class="text-center mt-2">
+                        <span id="duration-display">1 Month</span>
+                    </div>
+                </div>
+
+                <!-- Price Display -->
+                <div class="mb-3 text-center">
+                    <span class="h4 fw-bold">Total Price: <span id="price">4.99€</span></span>
+                    <br>
+                    <span class="text-muted">Discount: <span id="discount" class="text-success">0.00€</span></span>
+                </div>
+                <small>Payment is provided by Stripe. Stripe offers payment methods for many countries</small>
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary w-100 mt-3">Donate</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<#include "assets/footer.html">

@@ -1,0 +1,125 @@
+<#include "/ap/assets/base.html">
+<div class="container-fluid my-3">
+    <!-- Page Header -->
+    <div class="row align-items-center mb-3">
+        <div class="col-auto">
+            <h5 class="mb-0">
+                <i class="fa-solid fa-cog"></i> System Statistics
+            </h5>
+        </div>
+    </div>
+
+    <!-- Statistic Cards -->
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-microchip"></i> OS Name</h5>
+                    <p class="card-text">${os_name}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-tools"></i> OS Version</h5>
+                    <p class="card-text">${os_version}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-desktop"></i> Available Processors</h5>
+                    <p class="card-text">${available_processors}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-bolt"></i> System Load Average</h5>
+                    <p class="card-text">${system_load_average}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-users-cog"></i> Thread Count</h5>
+                    <p class="card-text">${thread_count} <a href="/ap/system/threads">(view)</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-rocket"></i> Peak Thread Count</h5>
+                    <p class="card-text">${peak_thread_count}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-user-ninja"></i> Daemon Thread Count</h5>
+                    <p class="card-text">${daemon_thread_count}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-user-ninja"></i> SQL current connections</h5>
+                    <p class="card-text">${sql_con} [${sql_con_list}] <a href="/ap/system/cons">(view)</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-memory"></i> JVM Memory Usage</h5>
+                    <div class="mb-2">
+                        <span>Total Memory: ${jvm_total_memory} bytes</span>
+                    </div>
+                    <div class="progress mb-2" style="height: 20px;">
+                        <div class="progress-bar" style="width: ${(jvm_total_memory - jvm_free_memory) / jvm_total_memory * 100}%; background-color: #007bff;">
+                            Used
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <span>Free Memory: ${jvm_free_memory} bytes</span>
+                    </div>
+                    <div class="progress mb-2" style="height: 20px;">
+                        <div class="progress-bar" style="width: ${(jvm_free_memory) / jvm_total_memory * 100}%; background-color: #28a745;">
+                            Free
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-user-ninja"></i> Beatmap Thumbnails cached</h5>
+                    <p class="card-text">${shiina_thumbnails}</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

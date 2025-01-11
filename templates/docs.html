@@ -1,0 +1,19 @@
+<#include "assets/base.html">
+<div class="container">
+    <!-- Combined Header and Content Card -->
+    <div class="card w-100">
+        <!-- Header Section -->
+        <div class="bg-secondary border-0 card-header text-body d-flex align-items-center py-4">
+            <div class="col-auto me-3">
+                <i class="${icon}" style="font-size: 2rem;"></i>
+            </div>
+            <h4 class="mb-0">${title}</h4> <!-- Same size as login page -->
+        </div>
+
+        <!-- Content Section -->
+        <div class="card-body bg-body px-4 py-3">
+            ${content}
+        </div>
+    </div>
+</div>
+<#include "assets/footer.html">

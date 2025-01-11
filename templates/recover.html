@@ -1,0 +1,51 @@
+
+<#include "assets/base.html">
+<div class="container">
+    <div class="card w-100">
+        <div class="bg-secondary border-0 card-header text-body d-flex justify-content-between align-items-center py-4">
+            <span class="h1 fw-bold mb-0">Recover Account</span>
+        </div>
+
+        <div class="card-body bg-body px-4">
+            <#if error??>
+                <div class="alert alert-danger" role="alert">
+                    ${error}
+                </div>
+            </#if>
+            <#if info??>
+                <div class="alert alert-primary" role="alert">
+                    ${info}
+                </div>
+            </#if>
+
+            <form data-turbo="false" data-toggle="validator" role="form" method="post" action="/recover">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group mb-3">
+                            <label>New Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                <input required name="password" type="password" class="form-control" placeholder="New Password" aria-label="New Password" aria-describedby="add-on-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="turnstile" data-theme="${c.mode}"></div>
+                <input type="hidden" name="token" value="${token}">
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <input type="hidden" name="redirect" value="">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Recover account</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<#include "assets/footer.html">
+<script>
+    var turnstileToken = '${turnstilePublic}';
+</script>

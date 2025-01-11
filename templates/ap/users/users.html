@@ -1,0 +1,116 @@
+<#include "/ap/assets/base.html">
+
+<div class="container-fluid my-3">
+  <div class="row align-items-center mb-3">
+    <div class="col-auto">
+      <h5 class="mb-0">
+        <i class="fa-solid fa-user-group"></i> Users
+      </h5>
+    </div>
+    <div class="col">
+      <form action="" method="GET" class="d-flex">
+        <input 
+          type="text" 
+          name="search" 
+          class="form-control" 
+          placeholder="Search users..." 
+          value="${search!''}" 
+          aria-label="Search">
+        <button type="submit" class="btn btn-primary ms-2">
+          <i class="fa-solid fa-search"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Avatar</th>
+          <th>Name</th>
+          <th>Privileges</th>
+          <th>Groups</th>
+        </tr>
+      </thead>
+      <tbody>
+        <#list users as apuser>
+          <tr onclick="window.location='/ap/user?id=${apuser.id?c}'" style="cursor: pointer;">
+            <td>
+              <img src="${avatarServer}/${apuser.id?c}" alt="${apuser.name} avatar" class="rounded-circle" style="width: 50px; height: 50px;">
+            </td>
+            <td>${apuser.name}</td>
+            <td class="priv-cell">
+              <#list apuser.priv as appriv>
+                ${appriv}<br>
+              </#list>
+            </td>
+            <td class="priv-cell">
+              <#list apuser.groups as group>
+                ${group.emoji} ${group.name}<br>
+              <#else>
+                None
+              </#list>
+            </td>
+          </tr>
+        </#list>
+      </tbody>
+    </table>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12 text-center">
+        <a href="?page=${page - 1}<#if search??>&search=${search}</#if>" class="btn btn-primary <#if page == 0>disabled</#if>">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <a href="?page=${page + 1}<#if search??>&search=${search}</#if>" class="btn btn-primary <#if !hasNextPage>disabled</#if>">
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+    </div>
+</div>
+</div>
+
+<style>
+  .table-responsive {
+    height: 85vh;
+  }
+
+  .priv-cell {
+    word-wrap: break-word; /* Allows text to wrap */
+    word-break: break-word; /* Ensures long words wrap */
+    white-space: normal; /* Forces wrapping behavior */
+    vertical-align: middle; /* Centers text vertically */
+  }
+
+  table {
+    table-layout: fixed; /* Enforces fixed column widths */
+    width: 100%; /* Makes the table span the container width */
+  }
+
+  table th, table td {
+    vertical-align: middle; /* Ensures vertical alignment for all cells */
+    text-align: center; /* Centers content horizontally */
+    overflow: hidden; /* Hides overflow for long content */
+    text-overflow: ellipsis; /* Adds ellipsis for clipped content */
+  }
+
+  table th:nth-child(1), table td:nth-child(1) {
+    width: 10%; /* Fixed width for Avatar column */
+  }
+
+  table th:nth-child(2), table td:nth-child(2) {
+    width: 30%; /* Fixed width for Name column */
+  }
+
+  table th:nth-child(3), table td:nth-child(3) {
+    width: 30%; /* Fixed width for Privileges column */
+  }
+
+  table th:nth-child(4), table td:nth-child(4) {
+    width: 30%; /* Fixed width for Groups column */
+  }
+</style>
+
+</body>
+</html>

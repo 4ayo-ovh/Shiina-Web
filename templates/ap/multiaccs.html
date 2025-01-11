@@ -1,0 +1,103 @@
+<#include "assets/base.html">
+<div class="container-fluid my-3">
+    <style>
+        .avatar {
+            width: 40px; /* Set the width */
+            height: 40px; /* Set the height */
+            border-radius: 50%; /* Circular avatars */
+            margin-right: 5px; /* Space between image and name */
+        }
+        .match {
+            height: 40px; /* Match line height */
+            width: 4px; /* Match line width */
+            background-color: red; /* Red line color */
+            display: inline-block; /* Inline block for alignment */
+            margin: 0 5px; /* Space around the line */
+        }
+    </style>
+
+    <!-- Page Header -->
+    <div class="row align-items-center mb-3">
+        <div class="col-auto">
+            <h5 class="mb-0">
+                <i class="fa-solid fa-users"></i> Multi-Account Detection
+            </h5>
+        </div>
+    </div>
+
+    <!-- Multi-Account Table -->
+    <div class="row">
+        <div class="col-12">
+            <#if multiAccountDetections?size == 0>
+                <div class="alert alert-info" role="alert">
+                    No multi-account detections found.
+                </div>
+            <#else>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">User 1</th>
+                            <th scope="col">User 2</th>
+                            <th scope="col">User IDs</th>
+                            <th scope="col">Same Uninstall ID</th>
+                            <th scope="col">Same Disk Serial</th>
+                            <th scope="col">Same Adapters</th>
+                            <th scope="col">Latest Activity</th>
+                            <th scope="col">Profile</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <#list multiAccountDetections as detection>
+                            <tr>
+                                <td>
+                                    <img src="${avatarServer}/${detection.user1?c}" alt="${detection.user1_name}'s Avatar" class="avatar">
+                                    ${detection.user1_name}
+                                </td>
+                                <td>
+                                    <img src="${avatarServer}/${detection.user2?c}" alt="${detection.user2_name}'s Avatar" class="avatar">
+                                    ${detection.user2_name}
+                                </td>
+                                <td>${detection.user1} & ${detection.user2}</td>
+                                <td>
+                                    <#if detection.same_uninstall_id>
+                                        <div class="match"></div>
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if detection.same_disk_serial>
+                                        <div class="match"></div>
+                                    </#if>
+                                </td>
+                                <td>
+                                    <#if detection.same_adapters>
+                                        <div class="match"></div>
+                                    </#if>
+                                </td>
+                                <td>${detection.latest_time}</td>
+                                <td>
+                                    <a href="/u/${detection.user1?c}" class="btn btn-sm btn-primary">Profile</a>
+                                    <a href="/u/${detection.user2?c}" class="btn btn-sm btn-primary">Profile</a>
+                                </td>
+                            </tr>
+                        </#list>
+                    </tbody>
+                </table>
+            </#if>
+        </div>
+    </div>
+
+
+        <div class="row">
+            <div class="col-12 text-center">
+                <a href="?page=${page - 1}" class="btn btn-primary <#if page == 0>disabled</#if>">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a href="?page=${page + 1}" class="btn btn-primary <#if !hasNextPage>disabled</#if>">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </div>
+        </div>
+
+</div>
+</body>
+</html>

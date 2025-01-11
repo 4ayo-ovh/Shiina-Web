@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark" data-bs-core="elegant">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link href="/css/halfmoon.min.css" rel="stylesheet">
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@400;600&display=swap">
+    <link rel="stylesheet" href="/css/apstyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <script src="/js/apscript.js"></script>
+    <#include "/freemarker/globals.ftl">
+
+</head>
+
+<body class="ps-xxl-sbwidth">
+    <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-xxl bg-body-tertiary border-bottom border-opacity-25 d-flex d-xxl-none">
+        <div class="container-fluid">
+            <a href="/ap/start" class="navbar-brand d-flex align-items-center">
+                <img src="${c.otherLogoUrl}" alt="icon" width="24" height="24" class="me-2"> 
+                Admin Panel
+            </a>
+            <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Sidebar -->
+    <nav class="sidebar offcanvas-start offcanvas-xxl bg-dark text-light" id="sidebar" tabindex="-1">
+        <!-- Sidebar Header -->
+        <div class="offcanvas-header bg-body-tertiary border-bottom border-opacity-25">
+            <a class="sidebar-brand d-flex align-items-center" href="/ap/start">
+                <img src="${c.otherLogoUrl}" alt="icon" width="24" height="24" class="me-2"> 
+                Admin Panel
+            </a>
+            <small class="text-muted ms-2"><span class="version">v1.0</span></small>
+        </div>
+
+        <!-- Sidebar Body -->
+        <div class="offcanvas-body">
+            <ul class="sidebar-nav">
+                <!-- Dashboard Section -->
+                <li class="mt-4">
+                    <h6 class="sidebar-header text-uppercase">Dashboard</h6>
+                    <hr class="sidebar-divider my-1">
+                </li>
+                <li class="nav-item">
+                    <a href="/ap/start" class="nav-link <#if actNav == 1>active</#if>">
+                        <i class="fa-solid fa-house me-2"></i> Start
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/ap/commands" class="nav-link <#if actNav == 2>active</#if>">
+                        <i class="fa-solid fa-terminal me-2"></i> Commands
+                    </a>
+                </li>
+
+                 <!-- Administrator Section (If Applicable) -->
+                 <#if userPriv?seq_contains("MODERATOR")>
+                 <li class="mt-4">
+                     <h6 class="sidebar-header text-uppercase">Moderation</h6>
+                     <hr class="sidebar-divider my-1">
+                 </li>
+                 <li class="nav-item">
+                     <a href="/ap/bancho" class="nav-link <#if actNav == 16>active</#if>">
+                         <i class="fa-solid fa-server me-2"></i> Bancho
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/ap/multiaccs" class="nav-link <#if actNav == 11>active</#if>">
+                         <i class="fa-solid fa-users me-2"></i> Multi Accounts
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/ap/users" class="nav-link <#if actNav == 14>active</#if>">
+                         <i class="fa-solid fa-user-group me-3"></i> Users
+                     </a>
+                 </li>
+                 </#if>
+
+                <!-- Administrator Section (If Applicable) -->
+                <#if userPriv?seq_contains("ADMINISTRATOR")>
+                <li class="mt-4">
+                    <h6 class="sidebar-header text-uppercase">Administrator</h6>
+                    <hr class="sidebar-divider my-1">
+                </li>
+                <li class="nav-item">
+                    <a href="/ap/system" class="nav-link <#if actNav == 10>active</#if>">
+                        <i class="fa-solid fa-cog me-2"></i> System
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/ap/themes" class="nav-link <#if actNav == 12>active</#if>">
+                        <i class="fa-solid fa-brush me-3"></i> Themes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/ap/groups" class="nav-link <#if actNav == 13>active</#if>">
+                        <i class="fa-solid fa-star me-3"></i> Groups
+                    </a>
+                </li>
+                
+                </#if>
+
+                <!-- Other Section -->
+                <li class="mt-4">
+                    <h6 class="sidebar-header text-uppercase">Other</h6>
+                    <hr class="sidebar-divider my-1">
+                </li>
+                <li class="nav-item">
+                    <a href="/" class="nav-link">
+                        <i class="fa-solid fa-arrow-left me-2"></i> Return to ${c.serverName}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>

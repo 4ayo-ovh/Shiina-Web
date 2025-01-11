@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="${c.mode}" data-bs-core="${c.theme}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="turbo-refresh-method" content="morph">
+    <link href="/css/halfmoon.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/shiina.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/turbo.js"></script>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback"></script>
+    <script src="/js/shiina.js"></script>
+    <script src="/js/shiina-search.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="http://cdn.wysibb.com/js/jquery.wysibb.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.wysibb.com/css/default/wbbtheme.css" />
+
+    <#if !currentTheme.included>
+    <link rel="stylesheet" href="/css/theme.css">
+    </#if>
+
+    <#if seo??>
+    <title>${seo.title}</title>
+    <meta property="og:title" content="${seo.title}">
+    <meta name="twitter:title" content="${seo.title}">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary">
+    <!-- <meta property="og:url" content="" />
+    <meta name="twitter:url" content="" />
+    <link rel="canonical" href=""/> -->
+    <meta name="description" content="${seo.description}">
+    <meta property="og:description" content="${seo.description}">
+    <meta name="twitter:description" content="${seo.description}">
+    <meta property="og:image" content="${seo.image}">
+    <meta name="twitter:image" content="${seo.image}">
+    <meta name="keywords" content='${seo.keywords?join(",")}'>
+    </#if>
+</head>
+
+<body>
+   
+    <div class="wrapper">
+    <#include "navbar.html">
+    <#include "/freemarker/globals.ftl">
+    <div id="wrapper" class="pt-4">

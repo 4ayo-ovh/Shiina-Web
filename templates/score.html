@@ -1,0 +1,124 @@
+<#include "assets/base.html">
+<div class="container">
+    <div class="card rounded-3">
+        <!-- Header Section with Player's Name and Score -->
+        <div class="card-header bg-secondary text-body d-flex justify-content-between align-items-center py-4">
+            <div class="d-flex align-items-center">
+                <#assign height=60>
+                <#include "/freemarker/gradeconvert.ftl">
+                <span class="h1 fw-bold mb-0">${score.username}'s Score</span>
+            </div>
+            <small class="text-end" data-timestamp-format="date" data-timestamp="${score.playTime}">
+                ${score.playTime}
+            </small>
+        </div>
+
+        <!-- Main Score Section -->
+        <div class="card-body px-4 bg-body">
+            <div class="row">
+                <!-- Performance Points and Accuracy -->
+                <div class="col-lg-6 d-flex flex-column">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <small>Performance Points</small>
+                            <h2 class="text-success">${score.pp?string("0")}pp</h2>
+                        </div>
+                        <div class="col-6">
+                            <small>Accuracy</small>
+                            <h2 class="text-info">${score.acc?string("0.00")}%</h2>
+                        </div>
+                    </div>
+
+                    <!-- Score and Mods -->
+                    <div class="row">
+                        <div class="col-6">
+                            <small>Score</small>
+                            <h2>${score.score}</h2>
+                        </div>
+                        <div class="col-6">
+                            <small>Mods</small>
+                            <#assign passedMods=score.mods>
+                            <h2 class="text-warning"><#include "/freemarker/modconvert.ftl"></h2>
+                        </div>
+                    </div>
+
+                    <!-- Download and Report Buttons -->
+                    <div class="btn-group mt-4" role="group">
+                        <a href="${apiUrlPub}/v1/get_replay?id=${score.id?c}" type="button" class="btn btn-primary">
+                            <i class="fa-solid fa-download"></i> Download Replay
+                        </a>
+                        <#if user??>
+                        <button type="button" class="btn btn-danger">
+                            <i class="fa-solid fa-exclamation-triangle"></i> Report Score
+                        </button>
+                        </#if>
+                    </div>
+                </div>
+
+                <!-- Beatmap Information -->
+                <div class="col-lg-6 mt-2 md-md-0">
+                    <#assign beatmap=score.beatmap>
+                    <#assign bigBm=true>
+                    <#include "/freemarker/models/beatmap.ftl">
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h5 class="text-center">Hit Statistics</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>300s:</span>
+                            <span class="badge bg-info rounded-pill">${score.n300}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Gekis:</span>
+                            <span class="badge bg-info rounded-pill">${score.ngeki}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>100s:</span>
+                            <span class="badge bg-secondary rounded-pill">${score.n100}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Katus:</span>
+                            <span class="badge bg-secondary rounded-pill">${score.nkatu}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>50s:</span>
+                            <span class="badge bg-danger rounded-pill">${score.n50}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>Misses:</span>
+                            <span class="badge bg-danger rounded-pill">${score.nmiss}</span>
+                        </li>
+                    </ul>
+                </div>
+    
+                <!-- Play Information -->
+                <div class="col-md-6">
+                    <h5 class="text-center">Play Information</h5>
+                    <ul class="list-group">
+                        <#assign height=20> 
+                        <li class="list-group-item">Play Time: ${score.playTime}</li>
+                        <li class="list-group-item">Grade: <#include "/freemarker/gradeconvert.ftl"></li>
+                        <#if score.status??><li class="list-group-item">Status: ${convertScoreStatus(score.status)}</li></#if>
+                    </ul>
+    
+                    <!-- Player Avatar and Info -->
+                    <div class="d-flex justify-content-center mt-3">
+                        <#assign u = {
+                            "id": score.userId,
+                            "name": score.username,
+                            "country": score.country,
+                            "big": true
+                        }>
+                        <#assign index = 0>
+                        <#include "/freemarker/models/user.ftl">
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+</div>
+<#include "assets/footer.html">

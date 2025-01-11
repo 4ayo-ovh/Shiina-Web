@@ -1,0 +1,62 @@
+<#include "assets/base.html">
+<div class="container-fluid my-3">
+    <!-- Page Header -->
+    <div class="row align-items-center mb-3">
+        <div class="col-auto">
+            <h5 class="mb-0">
+                <i class="fa-solid fa-house"></i> Start
+            </h5>
+        </div>
+    </div>
+
+    <!-- Statistic Cards -->
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-map"></i> Active Map Requests</h5>
+                    <p class="card-text">${active_map_requests}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-sign-in-alt"></i> Logins Today</h5>
+                    <p class="card-text">${logins_today}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-users"></i> Total Users</h5>
+                    <p class="card-text">${total_users}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-check-circle"></i> Verified Users</h5>
+                    <p class="card-text">${verified_users}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-star"></i> Map Ratings</h5>
+                    <p class="card-text">${map_ratings}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

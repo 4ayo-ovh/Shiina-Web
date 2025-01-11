@@ -1,0 +1,221 @@
+<#include "assets/base.html">
+
+    <div class="container">
+        <div class="card">
+            <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
+                <#include "/freemarker/selector.ftl">
+                    <div
+                        class="my-2 col-12 col-md-auto my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
+                        <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
+                            <button type="button"
+                                onclick="selectParam('mode', '<#if (mode == 0 || mode == 1 || mode == 2 || mode == 8)>${convertModeToRelax(mode)}</#if>')"
+                                class="btn btn-<#if (mode == 4 || mode == 5 || mode == 6)>primary<#else>secondary</#if>"
+                                <#if (mode==3)>disabled</#if>>Relax</button>
+                            <button type="button" onclick="selectParam('mode', '8')"
+                                class="btn btn-<#if mode == 8>primary<#else>secondary</#if>" <#if (mode !=0 && mode !=4
+                                && mode !=8)>disabled</#if>>AutoPilot</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card w-400 mx-auto my-4">
+            <div class="card-body">  
+                <div class="row border-bottom mb-2 py-4">
+                    <div class="col col-12 col-md-6 d-flex align-items-center">
+                        <h2 class="card-title m-2">${clan.name} <span class="btn btn-primary user-select-none">[${clan.tag}]</span></h2>
+                    </div>
+                    <div class="col col-12 col-md-6">
+                        <#assign u = {
+                            "id": clan.owner,
+                            "name": clan.ownerName,
+                            "country": clan.ownerCountry,
+                            "isOwner": true
+                        }>
+                        <#assign index=0>
+                        <#include "/freemarker/models/user.ftl">
+                    </div>
+                </div>
+
+                <div class="m-2 my-4">
+                    <div class="row">
+                        <h4>Rankings</h4>
+                        <div class="col col-12 col-sm-12 col-lg-6">
+                            <div class="row">
+                                <div class="col col-12 col-md-6">
+                                    <small>Total PP Rank</small>
+                                    <h2>#${clan.totalPPRank}</h2>
+                                </div>
+                                <div class="col col-12 col-md-6">
+                                    <small>Average PP Rank</small>
+                                    <h2>#${clan.avgPPRank}</h2>
+                                </div>
+                                <div class="col col-12 col-md-6">
+                                    <small>Ranked Score Rank</small>
+                                    <h2>#${clan.rankedScoreRank}</h2>
+                                </div>
+                                <div class="col col-12 col-md-6">
+                                    <small>Accuracy Rank</small>
+                                    <h2>#${clan.accRank}</h2>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col col-12 col-sm-12 col-lg-6">
+                            <div class="ml-2 mr-2">
+                                <table class="w-100">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                Clan created:
+                                            </td>
+                                            <td data-timestamp-format="date" data-timestamp="${clan.created}">
+                                                ${clan.created}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Owner last active
+                                            </td>
+                                            <td data-timestamp-format="unix"
+                                                data-timestamp="${clan.ownerLastActivity?c}">
+                                                ${clan.ownerLastActivity?c}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Members:
+                                            </td>
+                                            <td>${clan.members}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Total PP:
+                                            </td>
+                                            <td>${clan.totalPP}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Average PP:
+                                            </td>
+                                            <td>${clan.avgPP}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Ranked Score:
+                                            </td>
+                                            <td>${clan.rankedScore}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Accuracy:
+                                            </td>
+                                            <td>${clan.acc}%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" id="leaderboard">
+                    <#list members as u>
+                        <#assign index=u?index>
+                        <#include "/freemarker/models/user.ftl"> 
+                    </#list>
+                </div>
+
+                <#if (members?size> 4)>
+                    <div class="text-center mt-4">
+                        <button id="loadMoreBtn" class="btn btn-primary">Load More</button>
+                    </div>
+                </#if>
+                <input type="hidden" id="currentCount" value="4">
+                <input type="hidden" id="totalMembers" value="${members?size}">
+
+                <div class="row my-4 mx-0" id="activity">
+                    <#list activity as score>
+                        <#assign index=score?index>
+                        <#assign isActivity=true>
+                        <#include "/freemarker/models/score.ftl">
+                    </#list>
+                </div>
+                <input type="hidden" id="currentCountAct" value="4">
+                <input type="hidden" id="totalMembersAct" value="${activity?size}">
+                
+                <#if (activity?size> 4)>
+                    <div class="text-center mt-4">
+                        <button id="loadMoreBtnAct" class="btn btn-primary">Load More</button>
+                    </div>
+                </#if>
+                    
+            </div>
+        </div>
+    </div>
+
+    <#include "assets/footer.html">
+    <script>
+        var loadMoreBtn = document.getElementById('loadMoreBtn');
+        var loadMoreBtnAct = document.getElementById('loadMoreBtnAct');
+
+        var loadMoreBtnHandler = null;
+        var loadMoreBtnActHandler = null;
+    
+        function loadMoreHandler(isActivity) {
+            let currentCountName = isActivity ? 'currentCountAct' : 'currentCount';
+            let totalMembersName = isActivity ? 'totalMembersAct' : 'totalMembers';
+            let entryName = isActivity ? 'act' : 'member';
+    
+            let currentCount = parseInt(document.getElementById(currentCountName).value, 10);
+            let totalMembers = parseInt(document.getElementById(totalMembersName).value, 10);
+
+            const hiddenEntries = document.querySelectorAll('.' + entryName + '-entry.d-none');
+            const limit = Math.min(hiddenEntries.length, 4); 
+    
+            for (let i = 0; i < limit; i++) {
+                hiddenEntries[i].classList.remove('d-none');
+            }
+    
+            currentCount += limit;
+            document.getElementById(currentCountName).value = currentCount;
+
+            if (currentCount >= totalMembers || hiddenEntries.length === 0) {
+                if (isActivity) {
+                    loadMoreBtnAct.style.display = 'none'; 
+                } else {
+                    loadMoreBtn.style.display = 'none';
+                }
+            }
+        }
+    
+        function initLoadMoreButtons() {
+            cleanupLoadMoreButtons(); 
+    
+            if (loadMoreBtn) {
+                loadMoreBtnHandler = () => loadMoreHandler(false);
+                loadMoreBtn.addEventListener('click', loadMoreBtnHandler);
+            }
+    
+            if (loadMoreBtnAct) {
+                loadMoreBtnActHandler = () => loadMoreHandler(true);
+                loadMoreBtnAct.addEventListener('click', loadMoreBtnActHandler);
+            }
+        }
+    
+        function cleanupLoadMoreButtons() {
+            if (loadMoreBtn && loadMoreBtnHandler) {
+                loadMoreBtn.removeEventListener('click', loadMoreBtnHandler);
+                loadMoreBtnHandler = null;
+            }
+    
+            if (loadMoreBtnAct && loadMoreBtnActHandler) {
+                loadMoreBtnAct.removeEventListener('click', loadMoreBtnActHandler);
+                loadMoreBtnActHandler = null;
+            }
+        }
+    
+        document.addEventListener('turbo:load', initLoadMoreButtons);
+        document.addEventListener('turbo:before-cache', cleanupLoadMoreButtons);
+    </script>
+    
+    

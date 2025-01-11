@@ -1,0 +1,1 @@
+ <#if score.grade != "F"><img src="/img/ranking/ranking-${score.grade}.png" alt="Grade" class="img-fluid me-3" style="height: ${height}px;"><#else><i class="fa-solid fa-f h1 mx-2 me-4"></i></#if>

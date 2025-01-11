@@ -1,0 +1,55 @@
+</div>
+</div>
+<footer class="section footer-dark bg-secondary text-body-secondary footer pt-4">
+    <div class="container">
+        <div class="row row-30">
+            <div class="col-md-4 col-xl-5">
+                <div class="pr-xl-4">
+                    <a class="brand" href="/">
+                        <img class="img-fluid footer-logo" src="${c.logoUrl}" alt="osuNoLimits Logo">
+                    </a>
+                    <p class="footer-text mt-2">
+                       ${c.footerDescription}
+                    </p>
+                    <p class="rights mt-3">
+                        ${c.footerCopyright} | 
+                        <#assign footerDocs = [] />
+                        <#list docs as doc>
+                            <#if doc.footer == "true">
+                                <#if doc.behindLogin == "true">
+                                    <#if user??>
+                                        <#assign footerDocs += [doc] />
+                                    </#if>
+                                <#else>
+                                    <#assign footerDocs += [doc] />
+                                </#if>
+                            </#if>
+                        </#list>
+                        
+                        <#list footerDocs as doc>
+                            <a href="/docs/${doc.route}">${doc.krz}</a>
+                            <#if doc?has_next> ● </#if>
+                        </#list>
+                        
+                        
+                    </p>
+                </div>
+            </div>
+            <#list c.footer as footerItem>
+            <div class="col-md-${footerItem?size} ms-md-auto">
+                <ul class="nav-list mt-2">
+                    <li> <h5 class="footer-heading">${footerItem.title}</h5></li>
+                    <#list footerItem.items as item>
+                        <li><a href="${item.url}" class="footer-link">${item.name}</a></li>
+                    </#list>
+                </ul>
+            </div>
+            </#list>
+        </div>
+    </div>
+</footer>
+
+<script>
+        var avatarServer = '${avatarServer}';
+
+</script>

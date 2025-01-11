@@ -1,0 +1,98 @@
+<#include "assets/base.html">
+<div class="container-fluid my-3">
+  
+    <div class="row align-items-center mb-3">
+      <div class="col-auto">
+          <h5 class="mb-0">
+            <i class="fa-solid fa-server"></i> Bancho
+          </h5>
+      </div>
+    </div>
+    
+    </div>
+<div class="container my-5">
+
+       <div class="row">
+        <#list online.players as p>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-inline-block"><img width="50" class="img-fluid img-thumbnail" src="${avatarServer}/${p.id?c}" alt=""></h5>
+                    <p class="card-text d-inline-block"><i class="ms-3 fa-solid text-success fa-circle me-3"></i><a target="_blank" href="/u/${p.id?c}">${p.name}</a></p>
+                </div>
+            </div>
+        </div>
+        </#list>
+        <#list online.bots as p>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title d-inline-block"><img width="50" class="img-fluid img-thumbnail" src="${avatarServer}/${p.id}" alt=""></h5>
+                    <p class="card-text d-inline-block"><i class="ms-3 fa-solid text-success fa-circle me-3"></i> ${p.name}</p>
+                </div>
+            </div>
+        </div>
+        </#list>
+       </div>
+
+
+    <div class="row ">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid text-success fa-circle "></i> Online Users</h5>
+                    <p class="card-text">${online.players?size} + (${online.bots?size})</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fa-solid fa-user"></i> Total Users</h5>
+                    <p class="card-text">${stats.total}</p>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <div
+        class="row justify-content-center align-items-center g-2"
+    >
+        <div class="col col-12">
+            <div class="card">
+                <div class="card-body">
+                    <span class="fs-5">Alert All</span>
+                    <div class="mb-3">
+                        <label for="" class="form-label"></label>
+                        <textarea class="form-control" id="alertInput" rows="3"></textarea>
+                    </div>
+                    <a
+                        name=""
+                        id="alertButton"
+                        class="btn btn-primary"
+                        role="button"
+                        >Send</a
+                    > <span id="alertStatus" class="text-success"></span>
+                    
+                </div>
+            </div>
+       
+        </div>
+
+    </div>
+    
+</div>
+<script>
+    document.getElementById('alertButton').addEventListener('click', async () => {
+        const alertInput = document.getElementById('alertInput').value;
+        const alertStatus = document.getElementById('alertStatus');
+        alertStatus.innerText = 'Sending...';
+        const res = await fetch('/ap/api/handler?type=alert_all&message='+document.getElementById('alertInput').value);
+        
+        document.getElementById('alertStatus').innerText = "'" + document.getElementById('alertInput').value + "' has been sent to all users.";
+        
+    });
+</script>
+</body>
+</html>

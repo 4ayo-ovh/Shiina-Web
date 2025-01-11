@@ -1,0 +1,245 @@
+<#include "assets/base.html">
+
+<div class="container">
+    <div class="card">
+        <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
+            
+            <#include "/freemarker/selector.ftl">
+                <div
+                    class="my-2 col-12 col-md-auto my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
+                    <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
+                        <button type="button"
+                            onclick="selectParam('mode', '<#if (mode == 0 || mode == 1 || mode == 2 || mode == 8)>${convertModeToRelax(mode)}</#if>')"
+                            class="btn btn-<#if (mode == 4 || mode == 5 || mode == 6)>primary<#else>secondary</#if>"
+                            <#if (mode==3)>disabled</#if>>Relax</button>
+                        <button type="button" onclick="selectParam('mode', '8')"
+                            class="btn btn-<#if mode == 8>primary<#else>secondary</#if>" <#if (mode !=0 && mode !=4
+                            && mode !=8)>disabled</#if>>AutoPilot</button>
+                    </div>
+
+                </div>
+
+        </div>
+        
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-body">
+        <#list beatmap.diffs as diff>
+            <a href="/b/${diff.id?c}" data-bs-toggle="tooltip" data-bs-placement="top" title="${diff.version}" class="fa-regular <#if beatmap.version = diff.version>shiina-versel</#if> shiina-ver text-${convertDiffToColor(diff.version)} ms-2 fa-circle"></a>
+        </#list>
+      </div>
+    </div>
+
+    <div class="card mt-2 p-4">
+       
+            <div class="row mb-2">
+                <div class="col col-12 col-md-4">
+                    <div style="min-height:160px;" class="image-placeholder">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <img src="https://assets.ppy.sh/beatmaps/${beatmap.setId?c}/covers/card.jpg" 
+                    onload="loadLazyLoadImage(this);"
+                    onerror="lazyLoadNoImage(this, '${noBeatmapIcon}');"     
+                    class="img-fluid card-img rounded w-100" style="min-height:160px;  object-fit: cover; height: 100%;">
+                </div>
+                <div class="col-12 col-md-8">
+                    <h1 class="card-title">${beatmap.artist} - ${beatmap.title} [${beatmap.version}]</h1>
+                    <p class="text-muted">Mapped by: ${beatmap.creator}</p>
+                    <div class="d-flex flex-wrap align-items-center">
+                        <span class="badge badge-secondary shiina-nosel me-1" data-bs-toggle="tooltip" title="Circle Size">CS: ${beatmap.cs}</span>
+                        <span class="badge badge-secondary shiina-nosel me-1" data-bs-toggle="tooltip" title="Drain">HP: ${beatmap.hp}</span>
+                        <span class="badge badge-secondary shiina-nosel me-1" data-bs-toggle="tooltip" title="Overall Difficulty">OD: ${beatmap.od}</span>
+                        <span class="badge badge-secondary shiina-nosel me-1" data-bs-toggle="tooltip" title="Approach Rate">AR: ${beatmap.ar}</span>
+                        <span class="badge bg-${convertStatusBackColor(beatmap.status)} shiina-nosel me-1" data-bs-toggle="tooltip" title="Status">
+                            ${convertStatusBack(beatmap.status)}
+                        </span>
+                    </div>
+                </div>
+            </div>
+       
+        
+
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <div class="d-grid gap-2">
+                    <!-- View on osu! -->
+                    <a 
+                        target="_blank" 
+                        href="https://osu.ppy.sh/beatmapsets/${beatmap.setId?c}#${convertModeBack(beatmap.mode)}/${id?c}" 
+                        class="btn btn-secondary d-flex align-items-center text-start"
+                        style="position: relative; padding-left: 2.5rem;"
+                    >
+                        <i class="fa-solid fa-circle" 
+                           style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);"></i>
+                        View on osu!
+                    </a>
+            
+                    <!-- Download with osu!direct -->
+                    <a 
+                        target="_blank" 
+                        href="osu://dl/${beatmap.setId?c}" 
+                        class="btn btn-secondary d-flex align-items-center text-start"
+                        style="position: relative; padding-left: 2.5rem;"
+                    >
+                        <i class="fa-solid fa-download" 
+                           style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);"></i>
+                        Download with osu!direct
+                    </a>
+            
+                    <!-- Download Beatmap -->
+                    <a 
+                        href="https://osu.direct/api/d/${beatmap.setId?c}" 
+                        class="btn btn-primary d-flex align-items-center text-start"
+                        style="position: relative; padding-left: 2.5rem;"
+                    >
+                        <i class="fa-solid fa-download" 
+                           style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%);"></i>
+                        Download Beatmap
+                    </a>
+                </div>
+            </div>
+            
+            
+            <div class="col-md-8">
+                <div class="d-flex flex-wrap align-items-center mb-3">
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="${beatmap.version}" class="me-3 no-a text-${convertDiffToColor(beatmap.version)}">
+                        <i class="fa-regular fa-circle"></i>
+                        <span class="ms-1">${beatmap.version}</span>
+                    </a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Difficulty" class="me-3 no-a text-primary">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="ms-1">${beatmap.diff?string("0.00")}</span>
+                    </a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="BPM" class="me-3 no-a text-primary">
+                        <i class="fa-solid fa-headphones"></i>
+                        <span class="ms-1">${beatmap.bpm}</span>
+                    </a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Length (Minutes)" class="me-3 no-a text-primary">
+                        <i class="fa-solid fa-stopwatch"></i>
+                        <span class="ms-1">${(beatmap.totalLength / 60)?string("0.0")}</span>
+                    </a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Plays" class="me-3 no-a text-primary">
+                        <i class="fa-solid fa-play"></i>
+                        <span class="ms-1">${beatmap.plays}</span>
+                    </a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Passes" class="me-3 no-a text-primary">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span class="ms-1">${beatmap.passes}</span>
+                    </a>
+                </div>
+                <div class="text-muted">
+                    Last Update: <small data-timestamp-format="date" data-timestamp="${beatmap.lastUpdate}">${beatmap.lastUpdate}</small>
+                </div>
+            </div>
+        </div>
+        
+        
+    </div>
+</div>
+<div class="container mb-4">
+    <div class="card mt-2 p-3">
+        <!-- Nav-fill -->
+        <ul class="nav nav-pills nav-fill mb-1">
+            <li class="nav-item">
+            <button class="nav-link <#if sort = 'pp'>active</#if>" onclick="removeParam('sort')" href="#">Performance</button>
+            </li>
+            <li class="nav-item">
+            <button class="nav-link <#if sort = 'score'>active</#if>" onclick="selectParam('sort', 'score')" href="#">Score</button>
+            </li>
+
+        </ul>
+        <div class="col col-12">
+            <div class="row">
+                <div class="col col-auto">
+                    <button onclick="selectParam('page', '${page - 1}')"
+                        class="pagination-button bg-secondary m-2 <#if page ==1>disabled</#if>" <#if
+                        page==1>disabled</#if>><i
+                            class="fa-solid fa-arrow-left pagination-icon"></i></button>
+                </div>
+                <div class="col ms-auto col-auto">
+                    <button onclick="selectParam('page', '${page + 1}')"
+                        class="pagination-button bg-secondary m-2 <#if !hasNextPage>disabled</#if>" <#if !hasNextPage>disabled</#if>><i
+                            class="fa-solid fa-arrow-right pagination-icon"></i></button>
+                </div>
+            </div>
+        </div>
+        <#list beatmap.scores as score>
+        <div class="col col-12 member-entry">
+            <a href="/scores/${score.id?c}" class="bg-secondary m-2 p-3 row leaderboard-panel" style="border-radius: 5px;">
+                <!-- Column for avatar and flag horizontally aligned -->
+                <div class="col-auto d-flex align-items-center me-4">
+                    
+                    <!-- Avatar -->
+                    <span class="m-1">
+                        <img class="flag" src="${avatarServer}/${score.userId?c}" alt="">
+                    </span>
+                    <!-- Flag aligned next to the avatar -->
+                    <span class="m-1 ms-4">
+                        <img class="flag" src="/img/flags/${score.country}.svg" alt="${score.country} Flag">
+                    </span>
+
+                    <span class="col-auto ms-4"
+                                                style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);">#${(score?index + 1) + (50 * (page - 1))}</span>
+                </div>
+
+                <!-- Player name -->
+                <div class="col d-flex align-items-center">
+                    <span class="ms-2">
+                        <#assign passedMods = score.mods>
+                        ${score.name} <#include "/freemarker/modconvert.ftl">  
+                    </span>
+                </div>
+
+                <!-- Grade and PP aligned to the right -->
+                <div class="col-auto ms-auto d-flex align-items-center">
+                    <!-- Grade -->
+                    <div class="me-3 d-flex align-items-center">
+                        <#assign height=30> <#include "/freemarker/gradeconvert.ftl">
+                    </div>
+                    <!-- PP -->
+                    <div class="d-flex align-items-center">
+                        <#if sort == 'pp'>
+                            ${score.pp?string("0")}pp
+                        <#elseif sort == 'score'>
+                            ${score.score?c}
+                        </#if>
+                        
+                    </div>
+                </div>
+            </a>
+        </div>
+        <#else>
+        <div class="card">
+            <div class="card-body text-center py-5">
+              <i class="fa-solid fa-circle-exclamation text-primary mb-3" style="font-size: 3rem;"></i>
+              <h1 class="card-title">No scores set on this beatmap</h1>
+              <p class="card-text text-muted">Be the first to set a record on this beatmap!</p>
+            </div>
+          </div>
+          
+        </#list>
+        <div class="col col-12">
+            <div class="row">
+                <div class="col col-auto">
+                    <button onclick="selectParam('page', '${page - 1}')"
+                        class="pagination-button bg-secondary m-2 <#if page ==1>disabled</#if>" <#if
+                        page==1>disabled</#if>><i
+                            class="fa-solid fa-arrow-left pagination-icon"></i></button>
+                </div>
+                <div class="col ms-auto col-auto">
+                    <button onclick="selectParam('page', '${page + 1}')"
+                        class="pagination-button bg-secondary m-2 <#if !hasNextPage>disabled</#if>" <#if !hasNextPage>disabled</#if>><i
+                            class="fa-solid fa-arrow-right pagination-icon"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<#include "assets/footer.html">
+
